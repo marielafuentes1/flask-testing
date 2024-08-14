@@ -61,22 +61,23 @@ def register():
             error = "usuario o contraseña incorrecto."
         elif not password:
             error = "usuario o contraseña incorrecto."
+        elif not email:
+            error = "Email requerido."
         
 
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",
-                    (username,  generate_password_hash(password)),
+                    "INSERT INTO user (username, password, email) VALUES (?, ?, ?)",
+                    (username,  generate_password_hash(password), email),
                 )
                 db.commit()
             except db.IntegrityError as e:
                mensaje = e.args[0]
-               print(mensaje)
                if "user.username" in mensaje :
                 error = f"El usuario {username} ha sido registrado."
                elif "user.email" in mensaje :
-                   error = f"Mail{email} ha sido registrado"
+                   error = f"Mail{email} ha sido registrado."
                else:
                    error = "Error desconocido"
             
